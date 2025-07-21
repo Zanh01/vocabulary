@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học 1000 từ vựng cho bé</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        /* Trang chủ - Chọn chủ đề */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .topic-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .topic-card .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .topic-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .topic-card .progress {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Navigation */
+        .nav {
+            margin-bottom: 20px;
+        }
+
+        .nav button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .nav button:hover {
+            background: #ff5252;
+        }
+
+        /* Danh sách từ vựng */
+        .vocab-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .vocab-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .vocab-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .vocab-image {
+            width: 80px;
+            height: 80px;
+            background: #e9ecef;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+        }
+
+        .vocab-words {
+            margin-bottom: 15px;
+        }
+
+        .vocab-english {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .vocab-vietnamese {
+            font-size: 1.1em;
+            color: #7f8c8d;
+        }
+
+        .audio-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            background: #26d0ce;
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            margin-bottom: 30px;
+        }
+
+        .flashcard {
+            width: 350px;
+            height: 300px;
+            position: relative;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .flashcard-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-image {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .flashcard-controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .flip-btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 10px;
+            transition: background 0.3s ease;
+        }
+
+        .flip-btn:hover {
+            background: #e67e22;
+        }
+
+        /* Quiz */
+        .quiz-container {
+            text-align: center;
+        }
+
+        .quiz-question {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 3px solid #ecf0f1;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quiz-option:hover {
+            border-color: #3498db;
+        }
+
+        .quiz-option.correct {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #e74c3c;
+            background: #fdeaea;
+        }
+
+        .quiz-image {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .feedback {
+            font-size: 1.3em;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .feedback.correct {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .feedback.incorrect {
+            background: #fdeaea;
+            color: #e74c3c;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .flashcard {
+                width: 300px;
+                height: 250px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 Học 1000 từ vựng cùng bé 🌟</h1>
+            <p>Học tiếng Anh vui vẻ qua hình ảnh và âm thanh!</p>
+        </div>
+
+        <div class="content">
+            <!-- Navigation -->
+            <div class="nav hidden" id="navigation">
+                <button onclick="showTopics()">🏠 Trang chủ</button>
+                <button onclick="showVocabList()">📚 Danh sách từ</button>
+                <button onclick="showFlashcard()">🎴 Flashcard</button>
+                <button onclick="showQuiz()">🎮 Quiz</button>
+            </div>
+
+            <!-- Trang chủ - Chọn chủ đề -->
+            <div id="topics-page">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">Chọn chủ đề để bắt đầu học!</h2>
+                <div class="topics-grid" id="topics-grid"></div>
+            </div>
+
+            <!-- Danh sách từ vựng -->
+            <div id="vocab-page" class="hidden">
+                <h2 id="vocab-title" style="margin-bottom: 20px; color: #2c3e50;"></h2>
+                <div class="vocab-list" id="vocab-list"></div>
+            </div>
+
+            <!-- Flashcard -->
+            <div id="flashcard-page" class="hidden">
+                <h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">Flashcard</h2>
+                <div class="flashcard-container">
+                    <div class="flashcard" id="flashcard" onclick="flipCard()">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-image" id="flashcard-image">🐱</div>
+                                <p style="color: #7f8c8d;">Click để lật thẻ!</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.8em; font-weight: bold; margin-bottom: 10px;" id="flashcard-english">Cat</div>
+                                    <div style="font-size: 1.3em; color: #7f8c8d; margin-bottom: 20px;" id="flashcard-vietnamese">Con mèo</div>
+                                    <button class="audio-btn" onclick="playAudio(event)" id="flashcard-audio">▶</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="flip-btn" onclick="previousCard()">⬅ Trước</button>
+                    <button class="flip-btn" onclick="flipCard()">🔄 Lật thẻ</button>
+                    <button class="flip-btn" onclick="nextCard()">Sau ➡</button>
+                </div>
+            </div>
+
+            <!-- Quiz -->
+            <div id="quiz-page" class="hidden">
+                <h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">Quiz vui nhộn! 🎮</h2>
+                <div class="quiz-container">
+                    <div class="quiz-question" id="quiz-question">Hình nào là "Cat"?</div>
+                    <div class="quiz-options" id="quiz-options"></div>
+                    <div class="feedback hidden" id="quiz-feedback"></div>
+                    <button class="flip-btn hidden" id="next-question" onclick="nextQuestion()">Câu tiếp theo ➡</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu từ vựng
+        const vocabularyData = {
+            "animals": {
+                name: "🐾 Động vật",
+                emoji: "🐾",
+                words: [
+                    { english: "Cat", vietnamese: "Con mèo", emoji: "🐱" },
+                    { english: "Dog", vietnamese: "Con chó", emoji: "🐶" },
+                    { english: "Bird", vietnamese: "Con chim", emoji: "🐦" },
+                    { english: "Fish", vietnamese: "Con cá", emoji: "🐟" },
+                    { english: "Rabbit", vietnamese: "Con thỏ", emoji: "🐰" },
+                    { english: "Elephant", vietnamese: "Con voi", emoji: "🐘" },
+                    { english: "Lion", vietnamese: "Sư tử", emoji: "🦁" },
+                    { english: "Tiger", vietnamese: "Con hổ", emoji: "🐅" },
+                    { english: "Bear", vietnamese: "Con gấu", emoji: "🐻" },
+                    { english: "Monkey", vietnamese: "Con khỉ", emoji: "🐵" }
+                ]
+            },
+            "fruits": {
+                name: "🍎 Trái cây",
+                emoji: "🍎",
+                words: [
+                    { english: "Apple", vietnamese: "Táo", emoji: "🍎" },
+                    { english: "Banana", vietnamese: "Chuối", emoji: "🍌" },
+                    { english: "Orange", vietnamese: "Cam", emoji: "🍊" },
+                    { english: "Grape", vietnamese: "Nho", emoji: "🍇" },
+                    { english: "Strawberry", vietnamese: "Dâu tây", emoji: "🍓" },
+                    { english: "Watermelon", vietnamese: "Dưa hấu", emoji: "🍉" },
+                    { english: "Pineapple", vietnamese: "Dứa", emoji: "🍍" },
+                    { english: "Mango", vietnamese: "Xoài", emoji: "🥭" },
+                    { english: "Peach", vietnamese: "Đào", emoji: "🍑" },
+                    { english: "Cherry", vietnamese: "Cherry", emoji: "🍒" }
+                ]
+            },
+            "objects": {
+                name: "🎒 Đồ dùng",
+                emoji: "🎒",
+                words: [
+                    { english: "Book", vietnamese: "Sách", emoji: "📚" },
+                    { english: "Pen", vietnamese: "Bút", emoji: "✏️" },
+                    { english: "Ball", vietnamese: "Bóng", emoji: "⚽" },
+                    { english: "Car", vietnamese: "Ô tô", emoji: "🚗" },
+                    { english: "House", vietnamese: "Nhà", emoji: "🏠" },
+                    { english: "Clock", vietnamese: "Đồng hồ", emoji: "🕐" },
+                    { english: "Phone", vietnamese: "Điện thoại", emoji: "📱" },
+                    { english: "Computer", vietnamese: "Máy tính", emoji: "💻" },
+                    { english: "Chair", vietnamese: "Ghế", emoji: "🪑" },
+                    { english: "Table", vietnamese: "Bàn", emoji: "🪑" }
+                ]
+            },
+            "colors": {
+                name: "🌈 Màu sắc",
+                emoji: "🌈",
+                words: [
+                    { english: "Red", vietnamese: "Màu đỏ", emoji: "🔴" },
+                    { english: "Blue", vietnamese: "Màu xanh dương", emoji: "🔵" },
+                    { english: "Green", vietnamese: "Màu xanh lá", emoji: "🟢" },
+                    { english: "Yellow", vietnamese: "Màu vàng", emoji: "🟡" },
+                    { english: "Orange", vietnamese: "Màu cam", emoji: "🟠" },
+                    { english: "Purple", vietnamese: "Màu tím", emoji: "🟣" },
+                    { english: "Pink", vietnamese: "Màu hồng", emoji: "🩷" },
+                    { english: "Black", vietnamese: "Màu đen", emoji: "⚫" },
+                    { english: "White", vietnamese: "Màu trắng", emoji: "⚪" },
+                    { english: "Brown", vietnamese: "Màu nâu", emoji: "🤎" }
+                ]
+            },
+            "school": {
+                name: "🏫 Trường học",
+                emoji: "🏫",
+                words: [
+                    { english: "Teacher", vietnamese: "Giáo viên", emoji: "👩‍🏫" },
+                    { english: "Student", vietnamese: "Học sinh", emoji: "👨‍🎓" },
+                    { english: "Classroom", vietnamese: "Lớp học", emoji: "🏫" },
+                    { english: "Blackboard", vietnamese: "Bảng đen", emoji: "📋" },
+                    { english: "Pencil", vietnamese: "Bút chì", emoji: "✏️" },
+                    { english: "Eraser", vietnamese: "Cục tẩy", emoji: "🧽" },
+                    { english: "Ruler", vietnamese: "Thước kẻ", emoji: "📏" },
+                    { english: "Backpack", vietnamese: "Ba lô", emoji: "🎒" },
+                    { english: "Notebook", vietnamese: "Vở", emoji: "📓" },
+                    { english: "Library", vietnamese: "Thư viện", emoji: "📚" }
+                ]
+            },
+            "family": {
+                name: "👨‍👩‍👧‍👦 Gia đình",
+                emoji: "👨‍👩‍👧‍👦",
+                words: [
+                    { english: "Father", vietnamese: "Bố", emoji: "👨" },
+                    { english: "Mother", vietnamese: "Mẹ", emoji: "👩" },
+                    { english: "Brother", vietnamese: "Anh/Em trai", emoji: "👦" },
+                    { english: "Sister", vietnamese: "Chị/Em gái", emoji: "👧" },
+                    { english: "Grandfather", vietnamese: "Ông", emoji: "👴" },
+                    { english: "Grandmother", vietnamese: "Bà", emoji: "👵" },
+                    { english: "Uncle", vietnamese: "Chú/Bác", emoji: "👨‍🦳" },
+                    { english: "Aunt", vietnamese: "Cô/Dì", emoji: "👩‍🦳" },
+                    { english: "Cousin", vietnamese: "Anh/Chị/Em họ", emoji: "🧑‍🤝‍🧑" },
+                    { english: "Baby", vietnamese: "Em bé", emoji: "👶" }
+                ]
+            },
+            "house": {
+                name: "🏠 Trong nhà",
+                emoji: "🏠",
+                words: [
+                    { english: "Kitchen", vietnamese: "Bếp", emoji: "🍳" },
+                    { english: "Bedroom", vietnamese: "Phòng ngủ", emoji: "🛏️" },
+                    { english: "Bathroom", vietnamese: "Phòng t목욕", emoji: "🛁" },
+                    { english: "Living room", vietnamese: "Phòng khách", emoji: "🛋️" },
+                    { english: "Window", vietnamese: "Cửa sổ", emoji: "🪟" },
+                    { english: "Door", vietnamese: "Cửa", emoji: "🚪" },
+                    { english: "Bed", vietnamese: "Giường", emoji: "🛏️" },
+                    { english: "Sofa", vietnamese: "Ghế sofa", emoji: "🛋️" },
+                    { english: "Television", vietnamese: "Tivi", emoji: "📺" },
+                    { english: "Lamp", vietnamese: "Đèn", emoji: "💡" }
+                ]
+            },
+            "weather": {
+                name: "🌤️ Thời tiết",
+                emoji: "🌤️",
+                words: [
+                    { english: "Sunny", vietnamese: "Nắng", emoji: "☀️" },
+                    { english: "Rainy", vietnamese: "Mưa", emoji: "🌧️" },
+                    { english: "Cloudy", vietnamese: "Nhiều mây", emoji: "☁️" },
+                    { english: "Windy", vietnamese: "Gió", emoji: "💨" },
+                    { english: "Snowy", vietnamese: "Tuyết", emoji: "❄️" },
+                    { english: "Hot", vietnamese: "Nóng", emoji: "🔥" },
+                    { english: "Cold", vietnamese: "Lạnh", emoji: "🧊" },
+                    { english: "Storm", vietnamese: "Bão", emoji: "⛈️" },
+                    { english: "Rainbow", vietnamese: "Cầu vồng", emoji: "🌈" },
+                    { english: "Lightning", vietnamese: "Sét", emoji: "⚡" }
+                ]
+            },
+            "clothes": {
+                name: "👕 Quần áo",
+                emoji: "👕",
+                words: [
+                    { english: "Shirt", vietnamese: "Áo sơ mi", emoji: "👔" },
+                    { english: "T-shirt", vietnamese: "Áo thun", emoji: "👕" },
+                    { english: "Pants", vietnamese: "Quần dài", emoji: "👖" },
+                    { english: "Dress", vietnamese: "Váy", emoji: "👗" },
+                    { english: "Shoes", vietnamese: "Giày", emoji: "👞" },
+                    { english: "Socks", vietnamese: "Tất", emoji: "🧦" },
+                    { english: "Hat", vietnamese: "Mũ", emoji: "👒" },
+                    { english: "Jacket", vietnamese: "Áo khoác", emoji: "🧥" },
+                    { english: "Skirt", vietnamese: "Chân váy", emoji: "👚" },
+                    { english: "Gloves", vietnamese: "Găng tay", emoji: "🧤" }
+                ]
+            },
+            "food": {
+                name: "🍕 Đồ ăn",
+                emoji: "🍕",
+                words: [
+                    { english: "Rice", vietnamese: "Cơm", emoji: "🍚" },
+                    { english: "Bread", vietnamese: "Bánh mì", emoji: "🍞" },
+                    { english: "Pizza", vietnamese: "Pizza", emoji: "🍕" },
+                    { english: "Hamburger", vietnamese: "Hamburger", emoji: "🍔" },
+                    { english: "Noodles", vietnamese: "Mì", emoji: "🍜" },
+                    { english: "Egg", vietnamese: "Trứng", emoji: "🥚" },
+                    { english: "Milk", vietnamese: "Sữa", emoji: "🥛" },
+                    { english: "Water", vietnamese: "Nước", emoji: "💧" },
+                    { english: "Cake", vietnamese: "Bánh ngọt", emoji: "🍰" },
+                    { english: "Ice cream", vietnamese: "Kem", emoji: "🍦" }
+                ]
+            },
+            "transport": {
+                name: "🚗 Phương tiện",
+                emoji: "🚗",
+                words: [
+                    { english: "Bus", vietnamese: "Xe buýt", emoji: "🚌" },
+                    { english: "Train", vietnamese: "Tàu hỏa", emoji: "🚂" },
+                    { english: "Airplane", vietnamese: "Máy bay", emoji: "✈️" },
+                    { english: "Bicycle", vietnamese: "Xe đạp", emoji: "🚴" },
+                    { english: "Motorcycle", vietnamese: "Xe máy", emoji: "🏍️" },
+                    { english: "Ship", vietnamese: "Tàu thủy", emoji: "🚢" },
+                    { english: "Truck", vietnamese: "Xe tải", emoji: "🚛" },
+                    { english: "Taxi", vietnamese: "Taxi", emoji: "🚕" },
+                    { english: "Helicopter", vietnamese: "Trực thăng", emoji: "🚁" },
+                    { english: "Rocket", vietnamese: "Tên lửa", emoji: "🚀" }
+                ]
+            },
+            "sports": {
+                name: "⚽ Thể thao",
+                emoji: "⚽",
+                words: [
+                    { english: "Football", vietnamese: "Bóng đá", emoji: "⚽" },
+                    { english: "Basketball", vietnamese: "Bóng rổ", emoji: "🏀" },
+                    { english: "Tennis", vietnamese: "Tennis", emoji: "🎾" },
+                    { english: "Swimming", vietnamese: "Bơi lội", emoji: "🏊" },
+                    { english: "Running", vietnamese: "Chạy bộ", emoji: "🏃" },
+                    { english: "Baseball", vietnamese: "Bóng chày", emoji: "⚾" },
+                    { english: "Volleyball", vietnamese: "Bóng chuyền", emoji: "🏐" },
+                    { english: "Cycling", vietnamese: "Đua xe đạp", emoji: "🚴" },
+                    { english: "Boxing", vietnamese: "Quyền anh", emoji: "🥊" },
+                    { english: "Golf", vietnamese: "Golf", emoji: "⛳" }
+                ]
+            },
+            "music": {
+                name: "🎵 Âm nhạc",
+                emoji: "🎵",
+                words: [
+                    { english: "Piano", vietnamese: "Piano", emoji: "🎹" },
+                    { english: "Guitar", vietnamese: "Guitar", emoji: "🎸" },
+                    { english: "Drum", vietnamese: "Trống", emoji: "🥁" },
+                    { english: "Violin", vietnamese: "Violin", emoji: "🎻" },
+                    { english: "Singing", vietnamese: "Hát", emoji: "🎤" },
+                    { english: "Dancing", vietnamese: "Nhảy", emoji: "💃" },
+                    { english: "Music", vietnamese: "Âm nhạc", emoji: "🎵" },
+                    { english: "Song", vietnamese: "Bài hát", emoji: "🎶" },
+                    { english: "Radio", vietnamese: "Radio", emoji: "📻" },
+                    { english: "Speaker", vietnamese: "Loa", emoji: "🔊" }
+                ]
+            },
+            "numbers": {
+                name: "🔢 Số đếm",
+                emoji: "🔢",
+                words: [
+                    { english: "One", vietnamese: "Một", emoji: "1️⃣" },
+                    { english: "Two", vietnamese: "Hai", emoji: "2️⃣" },
+                    { english: "Three", vietnamese: "Ba", emoji: "3️⃣" },
+                    { english: "Four", vietnamese: "Bốn", emoji: "4️⃣" },
+                    { english: "Five", vietnamese: "Năm", emoji: "5️⃣" },
+                    { english: "Six", vietnamese: "Sáu", emoji: "6️⃣" },
+                    { english: "Seven", vietnamese: "Bảy", emoji: "7️⃣" },
+                    { english: "Eight", vietnamese: "Tám", emoji: "8️⃣" },
+                    { english: "Nine", vietnamese: "Chín", emoji: "9️⃣" },
+                    { english: "Ten", vietnamese: "Mười", emoji: "🔟" }
+                ]
+            },
+            "time": {
+                name: "📅 Thời gian",
+                emoji: "📅",
+                words: [
+                    { english: "Morning", vietnamese: "Buổi sáng", emoji: "🌅" },
+                    { english: "Afternoon", vietnamese: "Buổi chiều", emoji: "🌇" },
+                    { english: "Evening", vietnamese: "Buổi tối", emoji: "🌆" },
+                    { english: "Night", vietnamese: "Ban đêm", emoji: "🌙" },
+                    { english: "Today", vietnamese: "Hôm nay", emoji: "📅" },
+                    { english: "Tomorrow", vietnamese: "Ngày mai", emoji: "📆" },
+                    { english: "Yesterday", vietnamese: "Hôm qua", emoji: "📋" },
+                    { english: "Week", vietnamese: "Tuần", emoji: "📖" },
+                    { english: "Month", vietnamese: "Tháng", emoji: "📑" },
+                    { english: "Year", vietnamese: "Năm", emoji: "🗓️" }
+                ]
+            },
+            "emotions": {
+                name: "😊 Cảm xúc",
+                emoji: "😊",
+                words: [
+                    { english: "Happy", vietnamese: "Vui vẻ", emoji: "😊" },
+                    { english: "Sad", vietnamese: "Buồn", emoji: "😢" },
+                    { english: "Angry", vietnamese: "Tức giận", emoji: "😠" },
+                    { english: "Scared", vietnamese: "Sợ hãi", emoji: "😨" },
+                    { english: "Surprised", vietnamese: "Ngạc nhiên", emoji: "😲" },
+                    { english: "Excited", vietnamese: "Phấn khích", emoji: "🤩" },
+                    { english: "Tired", vietnamese: "Mệt mỏi", emoji: "😴" },
+                    { english: "Hungry", vietnamese: "Đói", emoji: "😋" },
+                    { english: "Thirsty", vietnamese: "Khát", emoji: "🥤" },
+                    { english: "Love", vietnamese: "Yêu", emoji: "❤️" }
+                ]
+            }
+        };
+
+        // Biến trạng thái
+        let currentTopic = null;
+        let currentFlashcardIndex = 0;
+        let currentQuizQuestion = 0;
+        let quizQuestions = [];
+        let viewedWords = {};
+
+        // Khởi tạo ứng dụng
+        function init() {
+            loadProgress();
+            renderTopics();
+        }
+
+        // Hiển thị danh sách chủ đề
+        function renderTopics() {
+            const grid = document.getElementById('topics-grid');
+            grid.innerHTML = '';
+            
+            Object.keys(vocabularyData).forEach(topicKey => {
+                const topic = vocabularyData[topicKey];
+                const viewedCount = viewedWords[topicKey] ? viewedWords[topicKey].size : 0;
+                const totalWords = topic.words.length;
+                
+                const card = document.createElement('div');
+                card.className = 'topic-card';
+                card.onclick = () => selectTopic(topicKey);
+                
+                card.innerHTML = `
+                    <div class="emoji">${topic.emoji}</div>
+                    <h3>${topic.name}</h3>
+                    <div class="progress">Đã học: ${viewedCount}/${totalWords} từ</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Chọn chủ đề
+        function selectTopic(topicKey) {
+            currentTopic = topicKey;
+            showVocabList();
+        }
+
+        // Hiển thị các trang
+        function showPage(pageId) {
+            const pages = ['topics-page', 'vocab-page', 'flashcard-page', 'quiz-page'];
+            pages.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            if (pageId !== 'topics-page') {
+                document.getElementById('navigation').classList.remove('hidden');
+            } else {
+                document.getElementById('navigation').classList.add('hidden');
+            }
+        }
+
+        function showTopics() {
+            currentTopic = null;
+            showPage('topics-page');
+            renderTopics();
+        }
+
+        function showVocabList() {
+            if (!currentTopic) return;
+            showPage('vocab-page');
+            renderVocabList();
+        }
+
+        function showFlashcard() {
+            if (!currentTopic) return;
+            showPage('flashcard-page');
+            currentFlashcardIndex = 0;
+            renderFlashcard();
+        }
+
+        function showQuiz() {
+            if (!currentTopic) return;
+            showPage('quiz-page');
+            initQuiz();
+        }
+
+        // Render danh sách từ vựng
+        function renderVocabList() {
+            const topic = vocabularyData[currentTopic];
+            document.getElementById('vocab-title').textContent = topic.name;
+            
+            const list = document.getElementById('vocab-list');
+            list.innerHTML = '';
+            
+            topic.words.forEach((word, index) => {
+                const item = document.createElement('div');
+                item.className = 'vocab-item';
+                item.onclick = () => markAsViewed(currentTopic, index);
+                
+                item.innerHTML = `
+                    <div class="vocab-image">${word.emoji}</div>
+                    <div class="vocab-words">
+                        <div class="vocab-english">${word.english}</div>
+                        <div class="vocab-vietnamese">${word.vietnamese}</div>
+                    </div>
+                    <button class="audio-btn" onclick="playWordAudio('${word.english}', event)">▶</button>
+                `;
+                
+                list.appendChild(item);
+            });
+        }
+
+        // Flashcard
+        function renderFlashcard() {
+            const topic = vocabularyData[currentTopic];
+            const word = topic.words[currentFlashcardIndex];
+            
+            document.getElementById('flashcard-image').textContent = word.emoji;
+            document.getElementById('flashcard-english').textContent = word.english;
+            document.getElementById('flashcard-vietnamese').textContent = word.vietnamese;
+            
+            // Reset trạng thái lật thẻ
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.classList.toggle('flipped');
+            
+            // Đánh dấu từ đã xem
+            markAsViewed(currentTopic, currentFlashcardIndex);
+        }
+
+        function nextCard() {
+            const topic = vocabularyData[currentTopic];
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % topic.words.length;
+            renderFlashcard();
+        }
+
+        function previousCard() {
+            const topic = vocabularyData[currentTopic];
+            currentFlashcardIndex = currentFlashcardIndex > 0 ? currentFlashcardIndex - 1 : topic.words.length - 1;
+            renderFlashcard();
+        }
+
+        // Quiz
+        function initQuiz() {
+            const topic = vocabularyData[currentTopic];
+            quizQuestions = [];
+            
+            // Tạo 5 câu hỏi ngẫu nhiên
+            for (let i = 0; i < Math.min(5, topic.words.length); i++) {
+                const correctWord = topic.words[Math.floor(Math.random() * topic.words.length)];
+                const wrongWords = topic.words.filter(w => w !== correctWord)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [correctWord, ...wrongWords].sort(() => Math.random() - 0.5);
+                
+                quizQuestions.push({
+                    question: `Hình nào là "${correctWord.english}"?`,
+                    correctAnswer: correctWord,
+                    options: options
+                });
+            }
+            
+            currentQuizQuestion = 0;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const question = quizQuestions[currentQuizQuestion];
+            document.getElementById('quiz-question').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option';
+                optionDiv.onclick = () => selectQuizAnswer(option, question.correctAnswer);
+                
+                optionDiv.innerHTML = `
+                    <div class="quiz-image">${option.emoji}</div>
+                    <div>${option.vietnamese}</div>
+                `;
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Ẩn feedback và nút tiếp theo
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('next-question').classList.add('hidden');
+        }
+
+        function selectQuizAnswer(selected, correct) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.onclick = null; // Vô hiệu hóa click
+                const optionText = option.querySelector('div:last-child').textContent;
+                
+                if (optionText === selected.vietnamese) {
+                    if (selected === correct) {
+                        option.classList.add('correct');
+                    } else {
+                        option.classList.add('incorrect');
+                    }
+                } else if (optionText === correct.vietnamese) {
+                    option.classList.add('correct');
+                }
+            });
+            
+            // Hiển thị feedback
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+            
+            if (selected === correct) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '🎉 Chính xác! Giỏi lắm!';
+                playWordAudio(correct.english);
+                markAsViewed(currentTopic, vocabularyData[currentTopic].words.indexOf(correct));
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `❌ Chưa đúng! Đáp án là "${correct.vietnamese}"`;
+            }
+            
+            // Hiển thị nút tiếp theo
+            if (currentQuizQuestion < quizQuestions.length - 1) {
+                document.getElementById('next-question').classList.remove('hidden');
+            } else {
+                const nextBtn = document.getElementById('next-question');
+                nextBtn.textContent = '🏠 Về trang chủ';
+                nextBtn.onclick = showTopics;
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            currentQuizQuestion++;
+            if (currentQuizQuestion < quizQuestions.length) {
+                renderQuizQuestion();
+            }
+        }
+
+        // Âm thanh
+        function playWordAudio(word, event) {
+            if (event) event.stopPropagation();
+            
+            // Sử dụng Web Speech API để phát âm
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function playAudio(event) {
+            event.stopPropagation();
+            const word = document.getElementById('flashcard-english').textContent;
+            playWordAudio(word);
+        }
+
+        // Theo dõi tiến độ
+        function markAsViewed(topicKey, wordIndex) {
+            if (!viewedWords[topicKey]) {
+                viewedWords[topicKey] = new Set();
+            }
+            viewedWords[topicKey].add(wordIndex);
+            saveProgress();
+            
+            // Cập nhật hiển thị tiến độ ở trang chủ nếu đang hiển thị
+            if (document.getElementById('topics-page').classList.contains('hidden') === false) {
+                renderTopics();
+            }
+        }
+
+        function saveProgress() {
+            const progressData = {};
+            Object.keys(viewedWords).forEach(topic => {
+                progressData[topic] = Array.from(viewedWords[topic]);
+            });
+            // Lưu vào biến (không dùng localStorage trong Claude artifacts)
+        }
+
+        function loadProgress() {
+            // Khởi tạo dữ liệu tiến độ trống
+            viewedWords = {};
+        }
+
+        // Khởi tạo ứng dụng
+        init();
+    </script>
+</body>
+</html>
