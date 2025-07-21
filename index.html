@@ -85,6 +85,9 @@
         /* Navigation */
         .nav {
             margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .nav button {
@@ -95,8 +98,10 @@
             border-radius: 25px;
             cursor: pointer;
             font-size: 1em;
-            margin-right: 10px;
             transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .nav button:hover {
@@ -305,6 +310,88 @@
             color: #e74c3c;
         }
 
+        /* Trang câu giao tiếp */
+        .conversations-container {
+            margin-top: 20px;
+        }
+
+        .conversations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .conversation-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .conversation-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .conversation-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .conversation-emoji {
+            font-size: 2em;
+            min-width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e9ecef;
+            border-radius: 50%;
+        }
+
+        .conversation-text {
+            flex: 1;
+        }
+
+        .conversation-english {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .conversation-vietnamese {
+            color: #7f8c8d;
+        }
+
+        .conversation-audio {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .audio-btn-conversation {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .audio-btn-conversation:hover {
+            background: #26d0ce;
+        }
+
         .hidden {
             display: none;
         }
@@ -323,6 +410,15 @@
             .header h1 {
                 font-size: 2em;
             }
+            
+            .conversations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav button {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
@@ -340,6 +436,7 @@
                 <button onclick="showVocabList()">📚 Danh sách từ</button>
                 <button onclick="showFlashcard()">🎴 Flashcard</button>
                 <button onclick="showQuiz()">🎮 Quiz</button>
+                <button onclick="showConversations()">💬 Câu giao tiếp</button>
             </div>
 
             <!-- Trang chủ - Chọn chủ đề -->
@@ -389,6 +486,14 @@
                     <div class="quiz-options" id="quiz-options"></div>
                     <div class="feedback hidden" id="quiz-feedback"></div>
                     <button class="flip-btn hidden" id="next-question" onclick="nextQuestion()">Câu tiếp theo ➡</button>
+                </div>
+            </div>
+            
+            <!-- Trang câu giao tiếp hàng ngày -->
+            <div id="conversations-page" class="hidden">
+                <h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">100 câu giao tiếp hàng ngày 💬</h2>
+                <div class="conversations-container">
+                    <div class="conversations-grid" id="conversations-grid"></div>
                 </div>
             </div>
         </div>
@@ -499,7 +604,7 @@
                 words: [
                     { english: "Kitchen", vietnamese: "Bếp", emoji: "🍳" },
                     { english: "Bedroom", vietnamese: "Phòng ngủ", emoji: "🛏️" },
-                    { english: "Bathroom", vietnamese: "Phòng t목욕", emoji: "🛁" },
+                    { english: "Bathroom", vietnamese: "Phòng tắm", emoji: "🛁" },
                     { english: "Living room", vietnamese: "Phòng khách", emoji: "🛋️" },
                     { english: "Window", vietnamese: "Cửa sổ", emoji: "🪟" },
                     { english: "Door", vietnamese: "Cửa", emoji: "🚪" },
@@ -652,6 +757,113 @@
                     { english: "Thirsty", vietnamese: "Khát", emoji: "🥤" },
                     { english: "Love", vietnamese: "Yêu", emoji: "❤️" }
                 ]
+            },
+            "daily_conversations": {
+                name: "💬 Giao tiếp hàng ngày",
+                emoji: "💬",
+                words: [
+                    { english: "Hello", vietnamese: "Xin chào", emoji: "👋" },
+                    { english: "Good morning", vietnamese: "Chào buổi sáng", emoji: "🌞" },
+                    { english: "Good afternoon", vietnamese: "Chào buổi chiều", emoji: "🌇" },
+                    { english: "Good evening", vietnamese: "Chào buổi tối", emoji: "🌃" },
+                    { english: "How are you?", vietnamese: "Bạn khỏe không?", emoji: "🙂" },
+                    { english: "I'm fine, thank you", vietnamese: "Tôi khỏe, cảm ơn", emoji: "👍" },
+                    { english: "What's your name?", vietnamese: "Bạn tên gì?", emoji: "👤" },
+                    { english: "My name is...", vietnamese: "Tôi tên là...", emoji: "💬" },
+                    { english: "Nice to meet you", vietnamese: "Rất vui được gặp bạn", emoji: "😊" },
+                    { english: "Goodbye", vietnamese: "Tạm biệt", emoji: "👋" },
+                    { english: "See you later", vietnamese: "Hẹn gặp lại", emoji: "⏱️" },
+                    { english: "Thank you", vietnamese: "Cảm ơn", emoji: "🙏" },
+                    { english: "You're welcome", vietnamese: "Không có gì", emoji: "😊" },
+                    { english: "Please", vietnamese: "Làm ơn", emoji: "🙏" },
+                    { english: "Excuse me", vietnamese: "Xin lỗi (làm phiền)", emoji: "🙇" },
+                    { english: "I'm sorry", vietnamese: "Tôi xin lỗi", emoji: "😔" },
+                    { english: "Yes", vietnamese: "Vâng", emoji: "✅" },
+                    { english: "No", vietnamese: "Không", emoji: "❌" },
+                    { english: "I don't understand", vietnamese: "Tôi không hiểu", emoji: "❓" },
+                    { english: "Can you help me?", vietnamese: "Bạn có thể giúp tôi không?", emoji: "🙋" },
+                    { english: "How old are you?", vietnamese: "Bạn bao nhiêu tuổi?", emoji: "🎂" },
+                    { english: "I am 6 years old", vietnamese: "Tôi 6 tuổi", emoji: "👧" },
+                    { english: "Where are you from?", vietnamese: "Bạn đến từ đâu?", emoji: "🌍" },
+                    { english: "I'm from Vietnam", vietnamese: "Tôi đến từ Việt Nam", emoji: "🇻🇳" },
+                    { english: "What is this?", vietnamese: "Đây là cái gì?", emoji: "❓" },
+                    { english: "This is a book", vietnamese: "Đây là quyển sách", emoji: "📚" },
+                    { english: "What color is it?", vietnamese: "Nó màu gì?", emoji: "🎨" },
+                    { english: "It's red", vietnamese: "Nó màu đỏ", emoji: "🔴" },
+                    { english: "How many?", vietnamese: "Bao nhiêu?", emoji: "🔢" },
+                    { english: "One, two, three", vietnamese: "Một, hai, ba", emoji: "123" },
+                    { english: "I'm hungry", vietnamese: "Tôi đói", emoji: "😋" },
+                    { english: "I'm thirsty", vietnamese: "Tôi khát", emoji: "🥤" },
+                    { english: "I'm tired", vietnamese: "Tôi mệt", emoji: "😴" },
+                    { english: "I'm happy", vietnamese: "Tôi vui", emoji: "😊" },
+                    { english: "I'm sad", vietnamese: "Tôi buồn", emoji: "😢" },
+                    { english: "Let's play", vietnamese: "Cùng chơi nào", emoji: "🎮" },
+                    { english: "Let's go", vietnamese: "Đi thôi", emoji: "🚶" },
+                    { english: "Come here", vietnamese: "Lại đây", emoji: "👉" },
+                    { english: "Sit down", vietnamese: "Ngồi xuống", emoji: "🪑" },
+                    { english: "Stand up", vietnamese: "Đứng lên", emoji: "🧍" },
+                    { english: "Be quiet", vietnamese: "Hãy yên lặng", emoji: "🤫" },
+                    { english: "Listen", vietnamese: "Lắng nghe", emoji: "👂" },
+                    { english: "Look", vietnamese: "Nhìn kìa", emoji: "👀" },
+                    { english: "Good job!", vietnamese: "Làm tốt lắm!", emoji: "👏" },
+                    { english: "Well done!", vietnamese: "Hoàn thành tốt!", emoji: "🎉" },
+                    { english: "I love you", vietnamese: "Tôi yêu bạn", emoji: "❤️" },
+                    { english: "I miss you", vietnamese: "Tôi nhớ bạn", emoji: "💌" },
+                    { english: "Can I have...?", vietnamese: "Tôi có thể lấy...?", emoji: "🙋" },
+                    { english: "Can I go to the toilet?", vietnamese: "Tôi đi vệ sinh được không?", emoji: "🚽" },
+                    { english: "It's time to eat", vietnamese: "Đến giờ ăn rồi", emoji: "🍽️" },
+                    { english: "It's time to sleep", vietnamese: "Đến giờ ngủ rồi", emoji: "🛏️" },
+                    { english: "What do you want?", vietnamese: "Bạn muốn gì?", emoji: "❓" },
+                    { english: "I want water", vietnamese: "Tôi muốn nước", emoji: "💧" },
+                    { english: "I want to play", vietnamese: "Tôi muốn chơi", emoji: "🎮" },
+                    { english: "I like it", vietnamese: "Tôi thích nó", emoji: "👍" },
+                    { english: "I don't like it", vietnamese: "Tôi không thích nó", emoji: "👎" },
+                    { english: "It's beautiful", vietnamese: "Nó đẹp quá", emoji: "✨" },
+                    { english: "It's fun", vietnamese: "Nó vui quá", emoji: "😄" },
+                    { english: "It's delicious", vietnamese: "Nó ngon quá", emoji: "😋" },
+                    { english: "It's too big", vietnamese: "Nó quá to", emoji: "🫎" },
+                    { english: "It's too small", vietnamese: "Nó quá nhỏ", emoji: "🐜" },
+                    { english: "Help me", vietnamese: "Giúp tôi", emoji: "🆘" },
+                    { english: "Be careful", vietnamese: "Hãy cẩn thận", emoji: "⚠️" },
+                    { english: "Don't worry", vietnamese: "Đừng lo lắng", emoji: "😌" },
+                    { english: "Congratulations", vietnamese: "Chúc mừng", emoji: "🎊" },
+                    { english: "Happy birthday", vietnamese: "Chúc mừng sinh nhật", emoji: "🎂" },
+                    { english: "Merry Christmas", vietnamese: "Giáng sinh vui vẻ", emoji: "🎄" },
+                    { english: "Happy New Year", vietnamese: "Chúc mừng năm mới", emoji: "🎆" },
+                    { english: "Good luck", vietnamese: "Chúc may mắn", emoji: "🍀" },
+                    { english: "Have a nice day", vietnamese: "Chúc một ngày tốt lành", emoji: "🌞" },
+                    { english: "How much is it?", vietnamese: "Nó giá bao nhiêu?", emoji: "💰" },
+                    { english: "I want to buy this", vietnamese: "Tôi muốn mua cái này", emoji: "🛒" },
+                    { english: "What time is it?", vietnamese: "Mấy giờ rồi?", emoji: "🕒" },
+                    { english: "It's 3 o'clock", vietnamese: "Bây giờ là 3 giờ", emoji: "3️⃣" },
+                    { english: "Where is the bathroom?", vietnamese: "Nhà vệ sinh ở đâu?", emoji: "🚻" },
+                    { english: "I'm lost", vietnamese: "Tôi bị lạc", emoji: "🧭" },
+                    { english: "Call the police", vietnamese: "Gọi cảnh sát", emoji: "👮" },
+                    { english: "I need a doctor", vietnamese: "Tôi cần bác sĩ", emoji: "👨‍⚕️" },
+                    { english: "It hurts", vietnamese: "Đau quá", emoji: "😣" },
+                    { english: "Are you okay?", vietnamese: "Bạn có ổn không?", emoji: "🤔" },
+                    { english: "I'm okay", vietnamese: "Tôi ổn", emoji: "👍" },
+                    { english: "Let me see", vietnamese: "Để tôi xem", emoji: "👀" },
+                    { english: "I think so", vietnamese: "Tôi nghĩ vậy", emoji: "🤔" },
+                    { english: "I don't think so", vietnamese: "Tôi không nghĩ vậy", emoji: "🙅" },
+                    { english: "Maybe", vietnamese: "Có thể", emoji: "🤷" },
+                    { english: "Of course", vietnamese: "Dĩ nhiên", emoji: "😊" },
+                    { english: "That's great", vietnamese: "Tuyệt vời", emoji: "🌟" },
+                    { english: "That's too bad", vietnamese: "Tệ quá", emoji: "😞" },
+                    { english: "Never mind", vietnamese: "Đừng bận tâm", emoji: "😌" },
+                    { english: "You're right", vietnamese: "Bạn nói đúng", emoji: "✅" },
+                    { english: "You're wrong", vietnamese: "Bạn sai rồi", emoji: "❌" },
+                    { english: "I agree", vietnamese: "Tôi đồng ý", emoji: "👍" },
+                    { english: "I disagree", vietnamese: "Tôi không đồng ý", emoji: "👎" },
+                    { english: "I don't know", vietnamese: "Tôi không biết", emoji: "🤷" },
+                    { english: "Wait a minute", vietnamese: "Chờ một chút", emoji: "⏳" },
+                    { english: "Hurry up", vietnamese: "Nhanh lên", emoji: "🏃" },
+                    { english: "Slow down", vietnamese: "Chậm lại", emoji: "🐢" },
+                    { english: "Stop", vietnamese: "Dừng lại", emoji: "✋" },
+                    { english: "Go ahead", vietnamese: "Cứ tiếp tục đi", emoji: "👉" },
+                    { english: "Good night", vietnamese: "Chúc ngủ ngon", emoji: "🌙" },
+                    { english: "Sweet dreams", vietnamese: "Những giấc mơ đẹp", emoji: "💤" }
+                ]
             }
         };
 
@@ -695,12 +907,16 @@
         // Chọn chủ đề
         function selectTopic(topicKey) {
             currentTopic = topicKey;
-            showVocabList();
+            if (topicKey === 'daily_conversations') {
+                showConversations();
+            } else {
+                showVocabList();
+            }
         }
 
         // Hiển thị các trang
         function showPage(pageId) {
-            const pages = ['topics-page', 'vocab-page', 'flashcard-page', 'quiz-page'];
+            const pages = ['topics-page', 'vocab-page', 'flashcard-page', 'quiz-page', 'conversations-page'];
             pages.forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
@@ -737,6 +953,11 @@
             showPage('quiz-page');
             initQuiz();
         }
+        
+        function showConversations() {
+            showPage('conversations-page');
+            renderConversations();
+        }
 
         // Render danh sách từ vựng
         function renderVocabList() {
@@ -761,6 +982,37 @@
                 `;
                 
                 list.appendChild(item);
+            });
+        }
+        
+        // Render câu giao tiếp
+        function renderConversations() {
+            const grid = document.getElementById('conversations-grid');
+            grid.innerHTML = '';
+            
+            const conversations = vocabularyData['daily_conversations'].words;
+            
+            conversations.forEach((conversation, index) => {
+                const card = document.createElement('div');
+                card.className = 'conversation-card';
+                
+                card.innerHTML = `
+                    <div class="conversation-header">
+                        <div class="conversation-emoji">${conversation.emoji}</div>
+                        <div class="conversation-text">
+                            <div class="conversation-english">${conversation.english}</div>
+                            <div class="conversation-vietnamese">${conversation.vietnamese}</div>
+                        </div>
+                    </div>
+                    <div class="conversation-audio">
+                        <button class="audio-btn-conversation" onclick="playWordAudio('${conversation.english}', event)">
+                            <span>▶ Phát tiếng Anh</span>
+                        </button>
+
+                    </div>
+                `;
+                
+                grid.appendChild(card);
             });
         }
 
@@ -897,13 +1149,13 @@
         }
 
         // Âm thanh
-        function playWordAudio(word, event) {
+        function playWordAudio(word, event, lang = 'en') {
             if (event) event.stopPropagation();
             
             // Sử dụng Web Speech API để phát âm
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(word);
-                utterance.lang = 'en-US';
+                utterance.lang = lang === 'vi' ? 'vi-VN' : 'en-US';
                 utterance.rate = 0.8;
                 speechSynthesis.speak(utterance);
             }
@@ -934,12 +1186,22 @@
             Object.keys(viewedWords).forEach(topic => {
                 progressData[topic] = Array.from(viewedWords[topic]);
             });
-            // Lưu vào biến (không dùng localStorage trong Claude artifacts)
+            // Lưu vào localStorage
+            localStorage.setItem('vocabularyProgress', JSON.stringify(progressData));
         }
 
         function loadProgress() {
-            // Khởi tạo dữ liệu tiến độ trống
-            viewedWords = {};
+            // Tải dữ liệu tiến độ từ localStorage
+            const progressData = JSON.parse(localStorage.getItem('vocabularyProgress'));
+            if (progressData) {
+                viewedWords = {};
+                Object.keys(progressData).forEach(topic => {
+                    viewedWords[topic] = new Set(progressData[topic]);
+                });
+            } else {
+                // Khởi tạo dữ liệu tiến độ trống
+                viewedWords = {};
+            }
         }
 
         // Khởi tạo ứng dụng
